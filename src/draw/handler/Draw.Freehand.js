@@ -127,7 +127,8 @@ L.Draw.Freehand = L.Draw.Feature.extend({
 		        polygon = new L.Polygon(polyPoints);
 		        console.log(polyPoints)
 		        drawnItems.addLayer(polygon);
-		        polygon.editing.enable()
+		        polygon.editing.enable();
+                this._map.dragging.enable()
 		    },
 
 
