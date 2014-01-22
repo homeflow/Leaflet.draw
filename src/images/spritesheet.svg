@@ -38,4 +38,12 @@
 		/>
 	<path fill="#BBBBBB" d="M515,20v-2v-2h-10v2v2h-6v2h22v-2H515z M513,20h-6v-2h6V20z"/>
 </g>
+
+<!-- Pencil from view-source:https://upload.wikimedia.org/wikipedia/commons/a/ac/Black_pencil.svg -->
+<g id="g3765" stroke="#000000" fill="none">
+   <path id="rect2990" d="m70.064 422.35 374.27-374.26 107.58 107.58-374.26 374.27-129.56 21.97z" stroke-width="30"/>
+   <path id="path3771" d="m70.569 417.81 110.61 110.61" stroke-width="25"/>
+   <path id="path3777" d="m491.47 108.37-366.69 366.68" stroke-width="25"/>
+   <path id="path3763" d="m54.222 507.26 40.975 39.546" stroke-width="25"/>
+  </g>
 </svg>

@@ -8,6 +8,7 @@
 	
 
 	<script src="libs/leaflet-src.js"></script>
+	<script src="../src/ext/leaflet_canvas_layer.js"></script>
 
 	<script src="../src/Leaflet.draw.js"></script>
 
@@ -19,6 +20,8 @@
 	<script src="../src/draw/handler/Draw.Feature.js"></script>
 	<script src="../src/draw/handler/Draw.Polyline.js"></script>
 	<script src="../src/draw/handler/Draw.Polygon.js"></script>
+    <script src="../src/draw/handler/Draw.Freehand.js"></script>
+
 	<script src="../src/draw/handler/Draw.SimpleShape.js"></script>
 	<script src="../src/draw/handler/Draw.Rectangle.js"></script>
 	<script src="../src/draw/handler/Draw.Circle.js"></script>
@@ -59,27 +62,13 @@
 				polyline: {
 					metric: true
 				},
-				polygon: {
-					allowIntersection: false,
-					showArea: true,
-					drawError: {
-						color: '#b00b00',
-						timeout: 1000
-					},
-					shapeOptions: {
-						color: '#bada55'
-					}
-				},
-				circle: {
-					shapeOptions: {
-						color: '#662d91'
-					}
-				},
-				marker: false
+				rectangle: false,
+				polygon: false,
+				circle: false,
+				marker: false,
 			},
 			edit: {
 				featureGroup: drawnItems,
-				remove: false
 			}
 		});
 		map.addControl(drawControl);
