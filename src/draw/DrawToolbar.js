@@ -5,7 +5,8 @@ L.DrawToolbar = L.Toolbar.extend({
 		polygon: {},
 		rectangle: {},
 		circle: {},
-		marker: {}
+		marker: {},
+		freehand: {}
 	},
 
 	initialize: function (options) {
@@ -25,13 +26,13 @@ L.DrawToolbar = L.Toolbar.extend({
 	getModeHandlers: function (map) {
 		return [
             {
-            	enabled: this.options.polyline,
-            	handler: new L.Draw.Freehand(map, this.options.polyline),
-            	title: L.drawLocal.draw.toolbar.buttons.polyline,
+            	enabled: this.options.freehand,
+            	handler: new L.Draw.Freehand(map, this.options.freehand),
+            	title: L.drawLocal.draw.toolbar.buttons.freehand,
             }, 
 			{
 				enabled: this.options.polyline,
-				handler: new L.Draw.Freehand(map, this.options.polyline),
+				handler: new L.Draw.Polyline(map, this.options.polyline),
 				title: L.drawLocal.draw.toolbar.buttons.polyline
 			},
 			{

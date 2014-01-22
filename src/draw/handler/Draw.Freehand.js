@@ -1,6 +1,11 @@
 L.Freehand = {};
 
 L.Draw.Freehand = L.Draw.Feature.extend({
+
+    statics: {
+        TYPE: 'freehand'
+    },
+
     
     options: {
         allowIntersection: true,
@@ -41,7 +46,7 @@ L.Draw.Freehand = L.Draw.Feature.extend({
         }
 
         // Save the type so super can fire, need to do this as cannot do this.TYPE :(
-        this.type = L.Draw.Polyline.TYPE;
+        this.type = L.Draw.Freehand.TYPE;
 
         L.Draw.Feature.prototype.initialize.call(this, map, options);
     },
@@ -86,6 +91,10 @@ L.Draw.Freehand = L.Draw.Feature.extend({
 
 
             findxy: function(res, e){
+                if (res == 'up') {
+                   this.callbackTarget.disable()
+                   this.points.push([e.clientX,e.clientY])
+                }
                 if (res == 'down') {
                    this.points.push([e.clientX,e.clientY])
                 }
@@ -103,7 +112,7 @@ L.Draw.Freehand = L.Draw.Feature.extend({
 
             _on_mouse_up : function(e){ this.findxy('up', e)}, 
 
-            _on_mouse_out : function(e){ this.findxy('out', e)}, 
+            //_on_mouse_out : function(e){ this.findxy('out', e)}, 
 
             render: function() {
                 this.canvas = this.getCanvas();
@@ -132,9 +141,8 @@ L.Draw.Freehand = L.Draw.Feature.extend({
 
 
             redraw: function(res, cArray) {
-                if (res == 'up'){
+                if (res == 'up' && cArray.length > 5){
                     this.drawPolygon(this.sampler(cArray));
-                    this.callbackTarget.disable()
                 }
             },
 
