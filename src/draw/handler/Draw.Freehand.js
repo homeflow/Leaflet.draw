@@ -91,6 +91,10 @@ L.Draw.Freehand = L.Draw.Feature.extend({
 
 
             findxy: function(res, e){
+                if (res == 'drag'){
+                    this.points.push([e.touches[0].clientX, e.touches[0].clientY])
+                    this.draw()
+                }
                 if (res == 'up') {
                    this.callbackTarget.disable()
                    this.points.push([e.clientX,e.clientY])
@@ -105,6 +109,8 @@ L.Draw.Freehand = L.Draw.Feature.extend({
                 }
                 this.redraw(res, this.points)
             },
+
+            _on_finger_move : function(e){this.findxy('drag', e)}, 
 
             _on_mouse_move : function(e){this.findxy('move', e)}, 
             
@@ -121,6 +127,16 @@ L.Draw.Freehand = L.Draw.Feature.extend({
                 this.canvas.addEventListener("mousemove", function(e){self._on_mouse_move(e)}, false);
                 this.canvas.addEventListener("mousedown", function(e){self._on_mouse_down(e)}, false);
                 this.canvas.addEventListener("mouseup",   function(e){self._on_mouse_up(e)}, false);
+
+                this.canvas.addEventListener("touchstart",   function(e){
+                    e.preventDefault(); self._on_mouse_down(e)
+                }, false);
+                this.canvas.addEventListener("touchmove",   function(e){
+                    self._on_finger_move(e)
+                }, false);
+                this.canvas.addEventListener("touchend",   function(e){self._on_mouse_up(e)}, false);
+
+
                // this.canvas.addEventListener("mouseout",  function(e){self._on_mouse_out(e)}, false);
             }, 
         

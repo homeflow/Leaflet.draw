@@ -43,8 +43,17 @@
 	<script src="../src/edit/handler/EditToolbar.Delete.js"></script>
 </head>
 <body>
-	<div id="map" style="width: 800px; height: 600px; border: 1px solid #ccc"></div>
-	<button id="changeColor">Rectangle -> Blue</button>
+	<style>
+		body {
+			padding: 0;
+			margin: 0;
+		}
+		html, body, #map {
+			height: 100%;
+		}
+	</style>
+
+	<div id="map" style="width: 100%; height: 100%; border: 1px solid #ccc"></div>
 	<script>
 		var cloudmadeUrl = 'http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png',
 			cloudmade = new L.TileLayer(cloudmadeUrl, {maxZoom: 18}),
@@ -58,13 +67,6 @@
 
 		var drawControl = new L.Control.Draw({
 			position: 'topright',
-			draw: {
-				polyline: false,
-				rectangle: false,
-				polygon: false,
-				circle: false,
-				marker: false,
-			},
 			edit: {
 				featureGroup: drawnItems,
 			}
