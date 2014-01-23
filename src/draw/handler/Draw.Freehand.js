@@ -101,6 +101,7 @@ L.Draw.Freehand = L.Draw.Feature.extend({
             }, 
 
             findxy: function(res, e){
+                console.log(res)
                 if (res == 'up') {
                    this.callbackTarget.disable()
                 }
@@ -115,11 +116,14 @@ L.Draw.Freehand = L.Draw.Feature.extend({
             },
 
             pushPoints: function(e){
+                console.log(e.touches)
                 if(e.touches == undefined){
                    this.points.push([e.clientX,e.clientY])
                 }
                 else{
-                    this.points.push([e.touches[0].clientX, e.touches[0].clientY])
+                     
+
+                    this.points.push([e.touches[0].pageX - this._canvas.offsetLeft, e.touches[0].pageY - this._canvas.offsetTop])
                 } 
             },
 
