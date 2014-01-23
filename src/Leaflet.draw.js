@@ -24,6 +24,11 @@ L.drawLocal = {
 			}
 		},
 		handlers: {
+			freehand:{
+				tooltop:{
+					start: 'click, bitch'
+				}
+			},
 			circle: {
 				tooltip: {
 					start: 'Click and drag to draw circle.'

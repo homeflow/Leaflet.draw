@@ -140,6 +140,11 @@
 	background-position: -122px -2px;
 }
 
+.leaflet-draw-toolbar .leaflet-draw-draw-freehand {
+	background-position: -267px -2px;
+}
+
+
 /* ================================================================== */
 /* Edit toolbar
 /* ================================================================== */
