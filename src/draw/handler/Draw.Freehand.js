@@ -69,26 +69,32 @@ L.Draw.Freehand = L.Draw.Feature.extend({
 
             points : [],
 
-            draw: function() { 
-                var p_length = this.points.length
-                this.extendPath(
-                    this.points[p_length-2][0],
-                    this.points[p_length-2][1],
-                    this.points[p_length-1][0],
-                    this.points[p_length-1][1]
-                );
-            },
+            _on_finger_move : function(e){this.findxy('drag', e)}, 
 
-            extendPath: function(x1,y1,x2,y2){
-                this.ctx.beginPath();
-                this.ctx.moveTo(x1, y1);
-                this.ctx.lineTo(x2,y2);
-                this.ctx.strokeStyle = this.options.shapeOptions.color;
-                this.ctx.lineWidth = this.options.shapeOptions.weight;
-                this.ctx.stroke();
-                this.ctx.closePath();
-            },
+            _on_mouse_move : function(e){this.findxy('move', e)}, 
+            
+            _on_mouse_down : function(e){this.findxy('down', e)}, 
 
+            _on_mouse_up : function(e){ this.findxy('up', e)}, 
+            
+
+            render: function() {
+                this.canvas = this.getCanvas();
+                this.ctx = this.canvas.getContext('2d');
+                var self = this;
+                this.canvas.addEventListener("mousemove", function(e){self._on_mouse_move(e)}, false);
+                this.canvas.addEventListener("mousedown", function(e){self._on_mouse_down(e)}, false);
+                this.canvas.addEventListener("mouseup",   function(e){self._on_mouse_up(e)}, false);
+
+                this.canvas.addEventListener("touchstart",   function(e){
+                    e.preventDefault(); self._on_mouse_down(e)
+                }, false);
+                this.canvas.addEventListener("touchmove",   function(e){
+                    self._on_finger_move(e)
+                }, false);
+                this.canvas.addEventListener("touchend",   function(e){self._on_mouse_up(e)}, false);
+
+            }, 
 
             findxy: function(res, e){
                 if (res == 'drag'){
@@ -110,63 +116,38 @@ L.Draw.Freehand = L.Draw.Feature.extend({
                 this.redraw(res, this.points)
             },
 
-            _on_finger_move : function(e){this.findxy('drag', e)}, 
-
-            _on_mouse_move : function(e){this.findxy('move', e)}, 
-            
-            _on_mouse_down : function(e){this.findxy('down', e)}, 
-
-            _on_mouse_up : function(e){ this.findxy('up', e)}, 
-
-            //_on_mouse_out : function(e){ this.findxy('out', e)}, 
-
-            render: function() {
-                this.canvas = this.getCanvas();
-                this.ctx = this.canvas.getContext('2d');
-                var self = this;
-                this.canvas.addEventListener("mousemove", function(e){self._on_mouse_move(e)}, false);
-                this.canvas.addEventListener("mousedown", function(e){self._on_mouse_down(e)}, false);
-                this.canvas.addEventListener("mouseup",   function(e){self._on_mouse_up(e)}, false);
-
-                this.canvas.addEventListener("touchstart",   function(e){
-                    e.preventDefault(); self._on_mouse_down(e)
-                }, false);
-                this.canvas.addEventListener("touchmove",   function(e){
-                    self._on_finger_move(e)
-                }, false);
-                this.canvas.addEventListener("touchend",   function(e){self._on_mouse_up(e)}, false);
+            draw: function() { 
+                var p_length = this.points.length
+                this.extendPath(
+                    this.points[p_length-2][0],
+                    this.points[p_length-2][1],
+                    this.points[p_length-1][0],
+                    this.points[p_length-1][1]
+                );
+            },
 
 
-               // this.canvas.addEventListener("mouseout",  function(e){self._on_mouse_out(e)}, false);
-            }, 
-        
 
 
-			drawPolygon: function(cArray) {
-				var polyPoints = []
-    		    for(i = 1; i < cArray.length; i++){
-    		        var pintilus = new L.Point(cArray[i-1][0], cArray[i-1][1]);
-    		        var xip = map.containerPointToLatLng(pintilus);
-    		        polyPoints[i-1] = new L.LatLng(xip.lat, xip.lng);
-    		    }
-		        polygon = new L.Polygon(polyPoints);
-		        console.log(polyPoints)
-		        drawnItems.addLayer(polygon);
-		        polygon.editing.enable();
-                this._map.dragging.enable()
-		    },
+            extendPath: function(x1,y1,x2,y2){
+                this.ctx.beginPath();
+                this.ctx.moveTo(x1, y1);
+                this.ctx.lineTo(x2,y2);
+                this.ctx.strokeStyle = this.options.shapeOptions.color;
+                this.ctx.lineWidth = this.options.shapeOptions.weight;
+                this.ctx.stroke();
+                this.ctx.closePath();
+            },
 
 
             redraw: function(res, cArray) {
                 if (res == 'up'){
-                    console.log(cArray.length, 'Carry')
                     this.drawPolygon(this.properRDP(cArray,5));
                     this.callbackTarget.disable()
                 }
             },
 
-
-             properRDP: function(points,epsilon){
+            properRDP: function(points,epsilon){
                 var firstPoint=points[0];
                 var lastPoint=points[points.length-1];
                 if (points.length<3){
@@ -210,8 +191,26 @@ L.Draw.Freehand = L.Draw.Feature.extend({
                 }
                
                 return result;
-            }
+            },
 
+
+			drawPolygon: function(cArray) {
+				var polyPoints = []
+    		    for(i = 1; i < cArray.length; i++){
+    		        var pixelPoint = new L.Point(cArray[i-1][0], cArray[i-1][1]);
+    		        var  latLngPoint= map.containerPointToLatLng(pixelPoint);
+    		        polyPoints[i-1] = new L.LatLng(latLngPoint.lat, latLngPoint.lng);
+    		    }
+		        polygon = new L.Polygon(polyPoints);
+		        drawnItems.addLayer(polygon);
+                this._map.dragging.enable()
+		    }
+
+
+
+
+
+            
 
 		});
 
