@@ -158,17 +158,58 @@ L.Draw.Freehand = L.Draw.Feature.extend({
 
 
             redraw: function(res, cArray) {
-                if (res == 'up' && cArray.length > 5){
-                    this.drawPolygon(this.sampler(cArray));
+                if (res == 'up'){
+                    console.log(cArray.length, 'Carry')
+                    this.drawPolygon(this.properRDP(cArray,5));
+                    this.callbackTarget.disable()
                 }
             },
 
-            sampler: function(cArray){
-                mArray = []
-                for (i = 0; i < cArray.length; i=i+(Math.floor(cArray.length/10))){
-                    mArray.push([cArray[i][0], cArray[i][1]]);
+
+             properRDP: function(points,epsilon){
+                var firstPoint=points[0];
+                var lastPoint=points[points.length-1];
+                if (points.length<3){
+                    return points;
                 }
-                return mArray;
+                var index=-1;
+                var dist=0;
+                for (var i=1;i<points.length-1;i++){
+                    var cDist=this.findPerpendicularDistance(points[i],firstPoint,lastPoint);
+                    if (cDist>dist){
+                        dist=cDist;
+                        index=i;
+                    }
+                }
+                if (dist>epsilon){
+                    // iterate
+                    var l1=points.slice(0, index+1);
+                    var l2=points.slice(index);
+                    var r1=this.properRDP(l1,epsilon);
+                    var r2=this.properRDP(l2,epsilon);
+                    // concat r2 to r1 minus the end/startpoint that will be the same
+                    var rs=r1.slice(0,r1.length-1).concat(r2);
+                    return rs;
+                }else{
+                    return [firstPoint,lastPoint];
+                }
+            },
+                
+                
+            findPerpendicularDistance: function(p, p1,p2) {
+                // if start and end point are on the same x the distance is the difference in X.
+                var result;
+                var slope;
+                var intercept;
+                if (p1[0]==p2[0]){
+                    result=Math.abs(p[0]-p1[0]);
+                }else{
+                    slope = (p2[1] - p1[1]) / (p2[0] - p1[0]);
+                    intercept = p1[1] - (slope * p1[0]);
+                    result = Math.abs(slope * p[0] - p[1] + intercept) / Math.sqrt(Math.pow(slope, 2) + 1);
+                }
+               
+                return result;
             }
 
 
