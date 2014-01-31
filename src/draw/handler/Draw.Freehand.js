@@ -22,7 +22,7 @@ L.Draw.Freehand = L.Draw.Feature.extend({
         maxGuideLineLength: 4000,
         shapeOptions: {
             stroke: true,
-            color: '#f06eaa',
+            color: 'blue',
             weight: 4,
             opacity: 0.5,
             fill: false,
@@ -30,7 +30,9 @@ L.Draw.Freehand = L.Draw.Feature.extend({
         },
         metric: true, // Whether to use the metric meaurement system or imperial
         showLength: true, // Whether to display distance in the tooltip
-        zIndexOffset: 2000 // This should be > than the highest z-index any map layers
+        zIndexOffset: 2000, // This should be > than the highest z-index any map layers
+        repeatMode: false, //Keep drawing or not?
+        editable: true //Make polygon editable immediately after creation
     },
 
     canvasLayer : undefined,
@@ -112,7 +114,7 @@ L.Draw.Freehand = L.Draw.Feature.extend({
                     this.pushPoints(e)
                     this.draw()
                 }
-                this.redraw(res, this.points)
+                this.redrawPolygon(res, this.points)
             },
 
             pushPoints: function(e){
@@ -151,9 +153,9 @@ L.Draw.Freehand = L.Draw.Feature.extend({
             },
 
 
-            redraw: function(res, cArray) {
+            redrawPolygon: function(res, cArray) {
                 if (res == 'up'){
-                    this.drawPolygon(this.properRDP(cArray,5));
+                    this.drawPolygon(this.properRDP(cArray,2));
                     this.callbackTarget.disable()
                 }
             },
@@ -214,6 +216,9 @@ L.Draw.Freehand = L.Draw.Feature.extend({
     		    }
 		        polygon = new L.Polygon(polyPoints);
 		        drawnItems.addLayer(polygon);
+                if(this.options.editable){
+                    polygon.editing.enable()
+                }
                 this._map.dragging.enable()
 		    }
 
